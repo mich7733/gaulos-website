@@ -1,0 +1,283 @@
+═══════════════════════════════════════════════════════════════════════════════
+GAULOS WEBSITE — CLOUDFLARE PAGES DEPLOYMENT GUIDE
+═══════════════════════════════════════════════════════════════════════════════
+
+OVERVIEW
+────────────────────────────────────────────────────────────────────────────
+This is a 14-page static website for Cloudflare Pages. No build step required.
+All files are production-ready HTML, CSS, and JavaScript.
+
+STRUCTURE
+────────────────────────────────────────────────────────────────────────────
+/outputs/
+├── index.html                    (Homepage)
+├── css/
+│   └── styles.css                (Shared stylesheet)
+├── js/
+│   └── main.js                   (Shared JavaScript)
+├── opportunity/
+│   └── index.html
+├── model/
+│   └── index.html
+├── markets/
+│   └── index.html
+├── marketplaces/
+│   └── index.html
+├── partners/
+│   └── index.html
+├── services/
+│   └── index.html
+├── agentic/
+│   └── index.html
+├── why-gaulos/
+│   └── index.html
+├── governments/
+│   └── index.html
+├── work/
+│   └── index.html
+├── insights/
+│   └── index.html
+├── faq/
+│   └── index.html
+├── contact/
+│   └── index.html
+└── _redirects                    (URL rules, optional)
+
+How Cloudflare Pages serves this:
+- /index.html          → gaulos.eu/
+- /opportunity/        → gaulos.eu/opportunity/
+- /model/index.html    → gaulos.eu/model/
+- /contact/index.html  → gaulos.eu/contact/
+[All folder/index.html patterns render as clean URLs]
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 1: PREPARE YOUR FILES
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Download the /outputs folder from Claude (all files)
+
+2. Verify you have:
+   ✓ index.html (homepage)
+   ✓ css/styles.css
+   ✓ js/main.js
+   ✓ 13 subdirectories with index.html files in each:
+     - opportunity/
+     - model/
+     - markets/
+     - marketplaces/
+     - partners/
+     - services/
+     - agentic/
+     - why-gaulos/
+     - governments/
+     - work/
+     - insights/
+     - faq/
+     - contact/
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 2: CREATE A GITHUB REPOSITORY
+═══════════════════════════════════════════════════════════════════════════════
+
+Cloudflare Pages deploys from GitHub. You need a GitHub account (free).
+
+1. Go to https://github.com/new
+2. Create a new repository:
+   Repository name:  gaulos-website
+   Description:      Gaulos — The vessel between markets
+   Public:           Yes (recommended for simplicity)
+   DO NOT initialize with README/license yet
+   Click "Create repository"
+
+3. You'll see instructions. Follow "…or push an existing repository":
+
+4. On your computer, in the /outputs folder, run these commands in Terminal/Command Prompt:
+
+   git init
+   git add .
+   git commit -m "Initial commit: Gaulos website"
+   git branch -M main
+   git remote add origin https://github.com/YOUR_USERNAME/gaulos-website.git
+   git push -u origin main
+
+   (Replace YOUR_USERNAME with your actual GitHub username)
+
+5. Refresh github.com. You should see all your files in the repository.
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 3: CONNECT CLOUDFLARE PAGES
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Go to https://pages.cloudflare.com (sign in or create a Cloudflare account)
+
+2. Click "Create a project" → "Connect to Git"
+
+3. Authorize Cloudflare to access your GitHub account
+   (You'll be redirected to GitHub to approve)
+
+4. Select the "gaulos-website" repository
+
+5. Configure build settings:
+   Project name:              gaulos-website
+   Production branch:         main
+   Build command:             (leave EMPTY — no build needed)
+   Build output directory:    /  (just the root, or leave blank)
+
+6. Click "Save and Deploy"
+
+Cloudflare will now deploy your site. Wait 2-5 minutes for the build to complete.
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 4: VERIFY DEPLOYMENT
+═══════════════════════════════════════════════════════════════════════════════
+
+Once the deployment finishes:
+
+1. Cloudflare provides a temporary URL like: gaulos-website.pages.dev
+
+2. Test every page:
+   ✓ https://gaulos-website.pages.dev/                (Homepage)
+   ✓ https://gaulos-website.pages.dev/opportunity/    (Opportunity page)
+   ✓ https://gaulos-website.pages.dev/contact/        (Contact page)
+   [Test a few pages to verify the site structure]
+
+3. Verify navigation:
+   - Header links work and jump between pages
+   - Footer links work
+   - Chat button (bottom-right) links to contact page
+   - Language toggle (EN/AR) shows the Arabic notice overlay
+   - Mobile menu appears on small screens (if you resize browser)
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 5: CONNECT YOUR CUSTOM DOMAIN
+═══════════════════════════════════════════════════════════════════════════════
+
+To use gaulos.eu instead of gaulos-website.pages.dev:
+
+1. In Cloudflare Pages, select your "gaulos-website" project
+
+2. Click "Custom domains" in the left sidebar
+
+3. Click "Set up custom domain"
+
+4. Enter: gaulos.eu
+
+5. Cloudflare will check your domain registrar. Two options:
+
+   OPTION A (Easiest): Change nameservers to Cloudflare
+   - Cloudflare will provide 2 nameserver addresses
+   - Go to your domain registrar (GoDaddy, Namecheap, etc.)
+   - Replace the current nameservers with Cloudflare's
+   - Wait 24 hours for DNS to propagate
+   - Your site will be live at gaulos.eu
+
+   OPTION B: Add DNS records manually
+   - If you're keeping your current registrar/nameservers
+   - Add CNAME record: gaulos-website.pages.dev
+   - Follow Cloudflare's specific instructions
+   - Wait for DNS propagation
+
+6. Test: gaulos.eu should now load your website
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 6: OPTIONAL — ENABLE CLOUDFLARE'S WEB OPTIMIZATION
+═══════════════════════════════════════════════════════════════════════════════
+
+In Cloudflare dashboard:
+1. Select your domain (gaulos.eu)
+2. Go to "Speed" → "Optimization"
+3. Enable:
+   ✓ Minify JavaScript
+   ✓ Minify CSS
+   ✓ Minify HTML
+   ✓ Auto Minify (if available)
+4. Go to "Caching" → set Browser Cache TTL to "1 month"
+
+This improves page load speeds.
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 7: MONITOR & UPDATES
+═══════════════════════════════════════════════════════════════════════════════
+
+Whenever you make changes to the site:
+
+1. Update your files locally (any HTML, CSS, or JS changes)
+
+2. Commit and push to GitHub:
+   git add .
+   git commit -m "Update: [describe changes]"
+   git push
+
+3. Cloudflare automatically detects the push and redeploys within 2-5 minutes
+
+4. The live site updates automatically — no manual deployment needed
+
+═══════════════════════════════════════════════════════════════════════════════
+TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+"Pages says 'Build failed'"
+→ Check the build logs in Cloudflare Pages dashboard
+→ Most common issue: incorrect folder structure
+→ Verify /opportunity/index.html, /contact/index.html exist
+
+"Links are broken / 404 errors on subpages"
+→ Verify folder names match exactly:
+  opportunity (not Opportunity)
+  why-gaulos (not why_gaulos or "why gaulos")
+  All must be lowercase with hyphens
+→ Each folder MUST contain index.html
+
+"CSS not loading / page looks broken"
+→ Check browser console (F12) for 404 errors
+→ Verify css/styles.css exists
+→ Check HTML files reference: <link rel="stylesheet" href="/css/styles.css">
+
+"Language toggle or chat button not working"
+→ Verify js/main.js exists and is referenced in HTML:
+  <script src="/js/main.js"></script>
+→ Check browser console for JavaScript errors
+
+"Site still shows old content after I updated files"
+→ Hard refresh browser: Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac)
+→ Or clear browser cache
+→ Wait 5 minutes for Cloudflare cache to clear
+
+═══════════════════════════════════════════════════════════════════════════════
+SUPPORT & DOCUMENTATION
+═══════════════════════════════════════════════════════════════════════════════
+
+Cloudflare Pages docs:
+https://developers.cloudflare.com/pages/
+
+GitHub repository setup:
+https://docs.github.com/en/repositories/creating-and-managing-repositories
+
+Domain connection:
+https://developers.cloudflare.com/pages/platform/custom-domains/
+
+═══════════════════════════════════════════════════════════════════════════════
+FINAL CHECKLIST BEFORE GOING LIVE
+═══════════════════════════════════════════════════════════════════════════════
+
+Before announcing the site:
+
+□ All 14 pages load correctly at gaulos.eu/[page-path]
+□ Header navigation works on all pages
+□ Footer displays properly with 5 columns
+□ Contact form is visible and styled
+□ Language toggle (EN/AR) appears and shows Arabic notice overlay
+□ Chat button (fixed bottom-right) appears on all pages
+□ Mobile menu works on small screens
+□ All links are active and navigate correctly
+□ Email addresses are visible (inquiries@gaulos.eu)
+□ Madrid office address shows in footer and contact page
+□ Phone number placeholder visible (ready for real number)
+□ Page load speed is acceptable (<3 seconds)
+□ No JavaScript errors in browser console
+
+═══════════════════════════════════════════════════════════════════════════════
+
+If you need help at any step, reference this guide or contact Cloudflare support.
+
+═══════════════════════════════════════════════════════════════════════════════
